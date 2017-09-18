@@ -56,26 +56,33 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     """
     # TODO: Implement function
     conv_1x1_layer7 = tf.layers.conv2d(vgg_layer7_out, num_classes, 1, padding = 'same', 
-                                       kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3))
+                                       kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3),
+                                       kernel_initializer = tf.truncated_normal_initializer(stddev = 0.01))
     
     output = tf.layers.conv2d_transpose(conv_1x1_layer7, num_classes, 4, 2, padding = 'same', 
-                                        kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3))
+                                        kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3),
+                                        kernel_initializer = tf.truncated_normal_initializer(stddev = 0.01))
     
     conv_1x1_layer4 = tf.layers.conv2d(vgg_layer4_out, num_classes, 1, padding = 'same', 
-                                       kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3))
+                                       kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3),
+                                       kernel_initializer = tf.truncated_normal_initializer(stddev = 0.01))
+                                          
     
     output = tf.add(output, conv_1x1_layer4)
 
     output = tf.layers.conv2d_transpose(output, num_classes, 4, 2, padding = 'same', 
-                                        kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3))
+                                        kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3),
+                                        kernel_initializer = tf.truncated_normal_initializer(stddev = 0.01))
     
     conv_1x1_layer3 = tf.layers.conv2d(vgg_layer3_out, num_classes, 1, padding = 'same', 
-                                       kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3))
+                                       kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3),
+                                       kernel_initializer = tf.truncated_normal_initializer(stddev = 0.01))
     
     output = tf.add(output, conv_1x1_layer3)
     
     output = tf.layers.conv2d_transpose(output, num_classes, 16, 8, padding = 'same', 
-                                        kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3))
+                                        kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3),
+                                        kernel_initializer = tf.truncated_normal_initializer(stddev = 0.01))
 
     return output
 tests.test_layers(layers)
@@ -136,7 +143,7 @@ def run():
     data_dir = './data'
     runs_dir = './runs'
     tests.test_for_kitti_dataset(data_dir)
-    epochs = 15
+    epochs = 25
     batch_size = 8
     # Download pretrained vgg model
     helper.maybe_download_pretrained_vgg(data_dir)
